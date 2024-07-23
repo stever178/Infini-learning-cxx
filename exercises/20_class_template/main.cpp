@@ -16,7 +16,8 @@ struct Tensor4D {
         }
         data = new T[size];
         // memcpy(shape, shape_, 4 * sizeof(unsigned int));
-        std::memcpy(data, data_, size * sizeof(T));
+        // std::memcpy(data, data_, size * sizeof(T));
+        memcpy(data, data_, size * sizeof(T));
     }
     ~Tensor4D() {
         delete[] data;
@@ -34,12 +35,12 @@ struct Tensor4D {
     Tensor4D &operator+=(Tensor4D const &others) {
         // TODO: 实现单向广播的加法
         // in this example, no need to consider the illegal broadcast
-#define MAX_(a, b) ((a) >= (b) ? (a) : (b))
         for (int i = 0; i < 4; i++) {
             // notice this is +=, not +
             ASSERT(shape[i] != others.shape[i] and others.shape[i] != 1, "illegal broadcast");
         }
         // in this case, dim[]=this.shape[]
+#define MAX_(a, b) ((a) >= (b) ? (a) : (b))
         int dim0 = MAX_(shape[0], others.shape[0]);
         int dim1 = MAX_(shape[1], others.shape[1]);
         int dim2 = MAX_(shape[2], others.shape[2]);
@@ -47,7 +48,6 @@ struct Tensor4D {
 #undef MAX_
         int left_dim23 = shape[2] * shape[3];
         int left_dim123 = shape[1] * left_dim23;
-
         int right_dim23 = others.shape[2] * others.shape[3]; 
         int right_dim123 = others.shape[1] * right_dim23;
 
