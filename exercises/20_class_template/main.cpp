@@ -38,7 +38,8 @@ struct Tensor4D {
         // in this example, no need to consider the illegal broadcast
         for (int i = 0; i < 4; i++) {
             // notice this is +=, not +
-            ASSERT(shape[i] != others.shape[i] and others.shape[i] != 1, "illegal broadcast");
+            // ASSERT(!(shape[i] != others.shape[i] and others.shape[i] != 1), "illegal broadcast");
+            ASSERT(shape[i] == others.shape[i] or others.shape[i] == 1, "illegal broadcast");
         }
         // in this case, dim[]=this.shape[]
 #define MAX_(a, b) ((a) >= (b) ? (a) : (b))
