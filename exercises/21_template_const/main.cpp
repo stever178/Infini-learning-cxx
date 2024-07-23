@@ -37,7 +37,7 @@ private:
     unsigned int data_index(unsigned int const indices[N]) const {
         unsigned int index = 0;
         for (unsigned int i = 0; i < N; ++i) {
-            ASSERT(indices[i] < shape[i]);
+            ASSERT(indices[i] < shape[i], "wrong indices");
             // TODO: 计算 index
             if (i < N - 1)
                 index += indices[i] * shape[i + 1];
