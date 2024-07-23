@@ -15,12 +15,26 @@ public:
     // TODO: 实现复制构造器
     // DynFibonacci(DynFibonacci const &other) = delete;
     DynFibonacci(const DynFibonacci &other) {
+        printf("constructor");
         cached = other.cached;
         cache = new size_t[cached];
         for (int i = 0; i < cached; ++i) {
             cache[i] = other.cache[i];
         }
-    } 
+    }
+
+    DynFibonacci& operator=(const DynFibonacci &other) {
+        printf("assignment");
+        if (this != &other) {
+            delete[] cache;
+            cached = other.cached;
+            cache = new size_t[cached];
+            for (int i = 0; i < cached; ++i) {
+                cache[i] = other.cache[i];
+            }
+        }
+        return *this;
+    }
 
     // TODO: 实现析构器，释放缓存空间
     ~DynFibonacci() {

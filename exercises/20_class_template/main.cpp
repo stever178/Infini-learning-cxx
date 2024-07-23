@@ -10,7 +10,12 @@ struct Tensor4D {
     Tensor4D(unsigned int const shape_[4], T const *data_) {
         unsigned int size = 1;
         // TODO: 填入正确的 shape 并计算 size
+        for (int i = 0; i < 4; i++) {
+            shape[i] = shape_[i];
+            size *= shape[i];
+        }
         data = new T[size];
+        // memcpy(shape, shape_, 4 * sizeof(unsigned int));
         std::memcpy(data, data_, size * sizeof(T));
     }
     ~Tensor4D() {
@@ -28,6 +33,38 @@ struct Tensor4D {
     // 则 `this` 与 `others` 相加时，3 个形状为 `[1, 2, 1, 4]` 的子张量各自与 `others` 对应项相加。
     Tensor4D &operator+=(Tensor4D const &others) {
         // TODO: 实现单向广播的加法
+        // in this example, no need to consider the illegal broadcast
+#define MAX_(a, b) ((a) >= (b) ? (a) : (b))
+        for (int i = 0; i < 4; i++) {
+            // notice this is +=, not +
+            ASSERT(shape[i] != others.shape[i] and others.shape[i] != 1, "illegal broadcast");
+        }
+        // in this case, dim[]=this.shape[]
+        int dim0 = MAX_(shape[0], others.shape[0]);
+        int dim1 = MAX_(shape[1], others.shape[1]);
+        int dim2 = MAX_(shape[2], others.shape[2]);
+        int dim3 = MAX_(shape[3], others.shape[3]);
+#undef MAX_
+        int left_dim23 = shape[2] * shape[3];
+        int left_dim123 = shape[1] * left_dim23;
+
+        int right_dim23 = others.shape[2] * others.shape[3]; 
+        int right_dim123 = others.shape[1] * right_dim23;
+
+        for (int i0 = 0; i0 < dim0; i0++) {
+            int right0 = (others.shape[0] > 1 ? i0 : 0);
+            for (int i1 = 0; i1 < dim1; i1++) {
+                int right1 = (others.shape[1] > 1 ? i1 : 0);
+                for (int i2 = 0; i2 < dim2; i2++) {
+                    int right2 = (others.shape[2] > 1 ? i2 : 0);
+                    for (int i3 = 0; i3 < dim3; i3++) {
+                        int right3 = (others.shape[3] > 1 ? i3 : 0);
+                        data[i0 * left_dim123 + i1 * left_dim23 + i2 * shape[3] + i3] +=
+                            others.data[right0 * right_dim123 + right1 * right_dim23 + right2 * others.shape[3] + right3];
+                    }
+                }
+            }
+        }
         return *this;
     }
 };
