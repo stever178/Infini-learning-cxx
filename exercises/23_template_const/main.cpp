@@ -11,7 +11,7 @@ struct Tensor {
     Tensor(unsigned int const shape_[N]) {
         unsigned int size = 1;
         // TODO: 填入正确的 shape 并计算 size
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < N; i++) {
             shape[i] = shape_[i];
             size *= shape[i];
         }
@@ -37,23 +37,25 @@ private:
     unsigned int data_index(unsigned int const indices[N]) const {
         unsigned int index = 0;
 
-        T *temp = new T[N];
+        unsigned int *temp = new unsigned int[N];
         temp[N - 1] = shape[N - 1];
         for (int i = N - 2; i >= 0; i --) {
             temp[i] = shape[i] * temp[i + 1];
+            // printf("temp[%d] is %u ", i, temp[i]);
         }
 
         for (unsigned int i = 0; i < N; ++i) {
             ASSERT(indices[i] < shape[i], "Invalid index");
             // TODO: 计算 index
             if (i < N - 1) {
-                index += indices[i] * temp[i];
+                index += indices[i] * temp[i + 1];
             } else {
                 index += indices[i];
             }
         }
 
         delete[] temp;
+        // printf("\nindex is %d \n", index);
         return index;
     }
 };

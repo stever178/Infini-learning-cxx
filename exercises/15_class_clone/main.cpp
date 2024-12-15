@@ -17,10 +17,11 @@ public:
     }
 
     // TODO: 实现复制构造器
-    DynFibonacci(DynFibonacci const &) {
+    DynFibonacci(DynFibonacci const &other) {
+        cached = other.cached;
         cache = new size_t[cached];
         for (int i = 0; i < cached; ++i) {
-            cache[i] = this->cache[i];
+            cache[i] = other.cache[i];
         }
     }
 

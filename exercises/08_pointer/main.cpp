@@ -5,10 +5,25 @@ bool is_fibonacci(int *ptr, int len, int stride) {
     ASSERT(len >= 3, "`len` should be at least 3");
     // TODO: 编写代码判断从 ptr 开始，每 stride 个元素取 1 个元素，组成长度为 n 的数列是否满足
     // arr[i + 2] = arr[i] + arr[i + 1]
-    for (int i = 0; i < len - 2; i++) {
-        if (ptr[i + 2] != ptr[i] + ptr[i + 1]) {
-            return false;
+    int count = 0;
+    if (stride == 1) {
+        for (int i = 0; i + 2 < len; i ++) {
+            if (ptr[i + 2] != ptr[i] + ptr[i + 1]) {
+                return false;
+            }
         }
+    }
+    else if (stride == 2) {
+        for (int i = 0; count < len - 2; i += stride) {
+            // printf("%d ", ptr[i]);
+            if (ptr[i + 2 * stride] != ptr[i] + ptr[i + stride]) {
+                // printf("return false at pos ptr+%d", i);
+                return false;
+            } else {
+                count++;
+            }
+        }
+        // printf("\n");
     }
     return true;
 }

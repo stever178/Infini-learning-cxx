@@ -34,6 +34,10 @@ struct B final : public A {
     }
 };
 
+// 在类外部定义和初始化静态成员变量
+int A::num_a = 0; // 初始化 A::num_a
+int B::num_b = 0; // 初始化 B::num_b
+
 int main(int argc, char **argv) {
     auto a = new A;
     auto b = new B;

@@ -32,6 +32,7 @@ struct Tensor4D {
     // 则 `this` 与 `others` 相加时，3 个形状为 `[1, 2, 1, 4]` 的子张量各自与 `others` 对应项相加。
     Tensor4D &operator+=(Tensor4D const &others) {
         // TODO: 实现单向广播的加法
+        
 #define MAX_(a, b) ((a) >= (b) ? (a) : (b))
         int dim0 = MAX_(shape[0], others.shape[0]);
         int dim1 = MAX_(shape[1], others.shape[1]);

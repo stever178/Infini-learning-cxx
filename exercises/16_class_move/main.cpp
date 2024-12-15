@@ -25,8 +25,8 @@ public:
     DynFibonacci(DynFibonacci &&other) noexcept {
         cache = other.cache;
         cached = other.cached;
-        cache = nullptr;
-        cached = 0;
+        other.cache = nullptr;
+        other.cached = 0;
     }
 
     // TODO: 实现移动赋值
