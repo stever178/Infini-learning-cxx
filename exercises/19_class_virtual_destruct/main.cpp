@@ -10,7 +10,12 @@ struct A {
     A() {
         ++num_a;
     }
-    ~A() {
+    // 当一个基类的析构函数被声明为 virtual 时，它允许派生类覆盖（override）这个函数。
+    // 这是实现运行时多态（runtime polymorphism）的关键，
+    // 即在程序运行时根据对象的实际类型调用相应的析构函数。
+    // 如果析构函数不是 virtual，派生类的析构函数将不会被调用，
+    // 这可能导致资源泄漏或其他清理问题，因为派生类特有的资源不会被释放。
+    virtual ~A() {
         --num_a;
     }
 
@@ -58,10 +63,12 @@ int main(int argc, char **argv) {
 
     // TODO: 基类指针无法随意转换为派生类指针，补全正确的转换语句
     B &bb = *dynamic_cast<B *>(ab);
+    // printf("num_a %d, num_b %d \n", A::num_a, B::num_b);
     ASSERT(bb.name() == 'B', "Fill in the correct value for bb->name()");
 
     // TODO: ---- 以下代码不要修改，通过改正类定义解决编译问题 ----
     delete ab;// 通过指针可以删除指向的对象，即使是多态对象
+    // printf("num_a %d, num_b %d \n", A::num_a, B::num_b);
     ASSERT(A::num_a == 0, "Every A was destroyed");
     ASSERT(B::num_b == 0, "Every B was destroyed");
 
